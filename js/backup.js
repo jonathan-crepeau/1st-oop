@@ -193,26 +193,36 @@ const game = {
   dealCards() {
     for (let a = 0; a < 3; a++) {
       const random = Math.floor(Math.random() * (game.availableCards.length - 0) + 0);
-      console.log(game.availableCards[random]);
+      // console.log(`----------${player1.name}'s Card ----------------`)
+      // console.log(game.availableCards[random]);
       player1.availableCards.push(game.availableCards[random]);
       game.usedCards.push(game.availableCards[random]);
       game.availableCards.splice(random, 1);
     }
     for (let b = 0; b < 3; b++) {
       const random = Math.floor(Math.random() * (game.availableCards.length - 0) + 0);
-      console.log(game.availableCards[random]);
+      // console.log(`----------${robot.name}'s Card ----------------`);
+      // console.log(game.availableCards[random]);
       robot.availableCards.push(game.availableCards[random]);
       game.usedCards.push(game.availableCards[random]);
       game.availableCards.splice(random, 1);
     }
+    console.log(`----------${player1.name}'s Cards ----------------`);
+    console.log(player1.availableCards[0]);
+    console.log(player1.availableCards[1]);
+    console.log(player1.availableCards[2]);
+    console.log(`----------${robot.name}'s Cards ----------------`);
+    console.log(robot.availableCards[0]);
+    console.log(robot.availableCards[1]);
+    console.log(robot.availableCards[2]);
   },
   battle() {
     const playerCard = player1.playCard();
     const computerCard = robot.playCard();
-    console.log("-----------------");
+    console.log(`!!! ${player1.name}'s Battle Choice!!!`);
     console.log(playerCard);
+    console.log(`!!! ${robot.name}'s Battle Choice !!!`);
     console.log(computerCard);
-    console.log("-----------------");
     if (playerCard.damage > computerCard.damage) {
       game.score.player1.points += 1;
       console.log(
@@ -237,7 +247,7 @@ const game = {
       game.score.robot.rounds += 1;
       game.score.robot.points = 0;
       game.score.player1.points = 0;
-      return console.log(`End Of Round: ${robot.name} wins!`);
+      return console.log(`End Of Round: ${robot.name} wins!\n${player1.name} Rounds: ${game.score.player1.rounds}, ${robot.name} Rounds: ${game.score.robot.rounds}`);
     }
   },
   winner() {
