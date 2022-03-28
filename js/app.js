@@ -207,18 +207,27 @@ const game = {
       game.availableCards.splice(random, 1);
     }
     for (let b = 0; b < 3; b++) {
-      const random = Math.floor(Math.random() * (game.availableCards.length - 1) + 1);
-      console.log(game.availableCards[random]);
-      robot.availableCards.push(game.availableCards[random]);
-      game.usedCards.push(game.availableCards[random]);
-      game.availableCards.splice(random, 1);
+      if (game.availableCards.length > 1) {
+        const random = Math.floor(Math.random() * (game.availableCards.length - 1) + 1);
+        console.log(game.availableCards[random]);
+        robot.availableCards.push(game.availableCards[random]);
+        game.usedCards.push(game.availableCards[random]);
+        game.availableCards.splice(random, 1);
+      } else {
+        console.log(game.availableCards[0]);
+        robot.availableCards.push(game.availableCards[0]);
+        game.usedCards.push(game.availableCards[0]);
+        game.availableCards.splice(0, 1);
+      }
     }
   },
   battle() {
     const playerCard = player1.playCard();
     const computerCard = robot.playCard();
+    console.log('-----------------')
     console.log(playerCard);
     console.log(computerCard);
+    console.log("-----------------");
     if (playerCard.damage > computerCard.damage) {
       game.score.player1.points += 1;
       console.log(`${player1.name} wins!\nScore: ${player1.name}: ${game.score.player1.points}, ${robot.name}: ${game.score.robot.points}`);
@@ -231,9 +240,36 @@ const game = {
       console.log('It\'s a tie, no one gets any points.');
     }
   },
+  roundup() {
+    if (game.score.player1.points > game.score.robot.points) {
+      game.score.player1.rounds += 1;
+      game.score.player1.points = 0;
+      game.score.robot.points = 0;
+      return console.log(`End Of Round: ${player1.name} wins!`)
+    } else {
+      game.score.robot.rounds += 1;
+      game.score.robot.points = 0;
+      game.score.player1.points = 0;
+      return console.log(`End Of Round: ${robot.name} wins!`);
+    }
+  },
+  winner() {
+    if (game.score.player1.rounds > game.score.robot.rounds) {
+      console.log(`${player1.name} takes home the championship!`);
+    } else {
+      console.log(`${robot.name} takes home the championship!`);
+    }
+  }
 };
 
 const player1 = new Player('Jonathan');
 const robot = new ComputerPlayer('Computer');
 
-// console.log((Math.floor(Math.random() * (game.availableCards.length - 1) + 1)));
+while (game.availableCards.length > 0) {
+  game.dealCards();
+  for (let a = 0; a < 3; a++) {
+    game.battle();
+  }
+  game.roundup();
+}
+game.winner();
